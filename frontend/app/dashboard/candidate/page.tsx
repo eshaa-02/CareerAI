@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { Sparkles, Briefcase, Bookmark, TrendingUp, ArrowRight } from 'lucide-react';
@@ -186,15 +187,14 @@ export default function CandidateDashboardPage() {
                     <p className="text-xs text-[var(--text-muted)]">Match score: {app.matchScore}%</p>
                   </div>
                   <span
-                    className={`rounded-full px-3 py-1 text-xs font-semibold capitalize ${
-                      app.status === 'accepted'
+                    className={`rounded-full px-3 py-1 text-xs font-semibold capitalize ${app.status === 'accepted'
                         ? 'bg-emerald-500/15 text-emerald-500'
                         : app.status === 'rejected'
-                        ? 'bg-red-500/15 text-red-400'
-                        : app.status === 'shortlisted'
-                        ? 'bg-blue-500/15 text-blue-400'
-                        : 'bg-[var(--bg-card-alt)] text-[var(--text-muted)]'
-                    }`}
+                          ? 'bg-red-500/15 text-red-400'
+                          : app.status === 'shortlisted'
+                            ? 'bg-blue-500/15 text-blue-400'
+                            : 'bg-[var(--bg-card-alt)] text-[var(--text-muted)]'
+                      }`}
                   >
                     {app.status}
                   </span>
