@@ -1,0 +1,270 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --font-inter: 'Inter', system-ui, sans-serif;
+  --font-clash: 'Inter', system-ui, sans-serif;
+}
+
+/* ============================================================
+   THEME VARIABLES
+   .dark  = futuristic AI SaaS (deep black / navy / emerald glow)
+   .light = luxury (camel + sage green)
+   ============================================================ */
+
+.light {
+  --bg-primary: #faf6f0;
+  --bg-secondary: #f3ece0;
+  --bg-card: #ffffff;
+  --bg-card-alt: #f4f7f3;
+  --text-primary: #3e2b18;
+  --text-secondary: #7d5730;
+  --text-muted: #a08a6f;
+  --border-color: rgba(107, 144, 89, 0.18);
+  --accent-primary: #b8874a;
+  --accent-secondary: #6b9059;
+  --input-bg: #ffffff;
+  --input-text: #3e2b18;
+  --input-border: #d6c3a3;
+  --input-placeholder: #a08a6f;
+}
+
+.dark {
+  --bg-primary: #05070d;
+  --bg-secondary: #0a0e18;
+  --bg-card: rgba(18, 22, 31, 0.65);
+  --bg-card-alt: #0d1526;
+  --text-primary: #eef4f1;
+  --text-secondary: #a3b3ac;
+  --text-muted: #6b7a75;
+  --border-color: rgba(52, 211, 153, 0.16);
+  --accent-primary: #34d399;
+  --accent-secondary: #6ee7b7;
+  --input-bg: #0d1420;
+  --input-text: #eef4f1;
+  --input-border: rgba(52, 211, 153, 0.25);
+  --input-placeholder: #6b7a75;
+}
+
+* {
+  border-color: var(--border-color);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  transition: background-color 0.4s ease, color 0.4s ease;
+}
+
+.dark body {
+  background-image:
+    radial-gradient(ellipse 80% 50% at 50% -20%, rgba(52, 211, 153, 0.12), transparent),
+    radial-gradient(ellipse 60% 40% at 80% 100%, rgba(52, 211, 153, 0.06), transparent);
+  background-attachment: fixed;
+}
+
+.light body {
+  background-image:
+    radial-gradient(ellipse 80% 50% at 50% -10%, rgba(184, 135, 74, 0.08), transparent),
+    radial-gradient(ellipse 60% 40% at 10% 100%, rgba(107, 144, 89, 0.06), transparent);
+  background-attachment: fixed;
+}
+
+/* ============================================================
+   FORM FIELD FIX — every input/select/textarea must have
+   explicit, theme-aware text + background colors. This is what
+   prevents the "white text on white / invisible text" bug.
+   ============================================================ */
+
+input,
+textarea,
+select {
+  background-color: var(--input-bg);
+  color: var(--input-text);
+  border: 1px solid var(--input-border);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: var(--input-placeholder);
+  opacity: 1;
+}
+
+select option {
+  background-color: var(--input-bg);
+  color: var(--input-text);
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  outline: none;
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-primary) 20%, transparent);
+}
+
+input:disabled,
+textarea:disabled,
+select:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+input[type='checkbox'],
+input[type='radio'] {
+  accent-color: var(--accent-primary);
+}
+
+/* Date/time pickers inherit color scheme so native icons stay visible */
+.dark input[type='date'],
+.dark input[type='time'],
+.dark input[type='datetime-local'] {
+  color-scheme: dark;
+}
+.light input[type='date'],
+.light input[type='time'],
+.light input[type='datetime-local'] {
+  color-scheme: light;
+}
+
+/* ============================================================
+   REUSABLE COMPONENT CLASSES
+   ============================================================ */
+
+.glass-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+.dark .glass-card {
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
+}
+
+.light .glass-card {
+  box-shadow: 0 4px 20px rgba(93, 79, 53, 0.08);
+}
+
+.glass-card-hover {
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.dark .glass-card-hover:hover {
+  transform: translateY(-4px);
+  border-color: rgba(52, 211, 153, 0.4);
+  box-shadow: 0 0 32px rgba(52, 211, 153, 0.18), 0 8px 30px rgba(0, 0, 0, 0.5);
+}
+
+.light .glass-card-hover:hover {
+  transform: translateY(-4px);
+  border-color: rgba(184, 135, 74, 0.4);
+  box-shadow: 0 12px 32px rgba(93, 79, 53, 0.16);
+}
+
+.btn-primary {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-weight: 600;
+  border-radius: 0.85rem;
+  padding: 0.7rem 1.5rem;
+  transition: all 0.25s ease;
+  overflow: hidden;
+}
+
+.dark .btn-primary {
+  background: linear-gradient(135deg, #34d399, #059669);
+  color: #05070d;
+}
+.dark .btn-primary:hover {
+  box-shadow: 0 0 28px rgba(52, 211, 153, 0.45);
+  transform: translateY(-2px);
+}
+
+.light .btn-primary {
+  background: linear-gradient(135deg, #b8874a, #9c6f3b);
+  color: #ffffff;
+}
+.light .btn-primary:hover {
+  box-shadow: 0 8px 24px rgba(184, 135, 74, 0.35);
+  transform: translateY(-2px);
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+}
+
+.btn-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-weight: 600;
+  border-radius: 0.85rem;
+  padding: 0.7rem 1.5rem;
+  border: 1.5px solid var(--border-color);
+  color: var(--text-primary);
+  background: transparent;
+  transition: all 0.25s ease;
+}
+
+.dark .btn-secondary:hover {
+  border-color: var(--accent-primary);
+  background: rgba(52, 211, 153, 0.08);
+}
+.light .btn-secondary:hover {
+  border-color: var(--accent-secondary);
+  background: rgba(107, 144, 89, 0.08);
+}
+
+.gradient-text {
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+}
+.dark .gradient-text {
+  background-image: linear-gradient(135deg, #34d399, #a7f3d0);
+}
+.light .gradient-text {
+  background-image: linear-gradient(135deg, #b8874a, #6b9059);
+}
+
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--bg-card-alt) 25%,
+    var(--bg-secondary) 50%,
+    var(--bg-card-alt) 75%
+  );
+  background-size: 1000px 100%;
+  animation: shimmer 2s linear infinite;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--accent-primary);
+  opacity: 0.4;
+  border-radius: 999px;
+}

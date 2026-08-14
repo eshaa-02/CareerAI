@@ -1,0 +1,15 @@
+node_modules
+npm-debug.log
+.env
+.env.local
+.git
+.gitignore
+uploads/resumes/*
+uploads/avatars/*
+uploads/logos/*
+!uploads/resumes/.gitkeep
+!uploads/avatars/.gitkeep
+!uploads/logos/.gitkeep
+*.md
+Dockerfile
+.dockerignore

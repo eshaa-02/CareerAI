@@ -1,0 +1,47 @@
+name: Deploy
+
+# Runs only after CI succeeds on main, and only triggers deploys for
+# platforms whose deploy-hook secret has actually been configured — see
+# the `if:` conditions below. Vercel and Railway both auto-deploy on push
+# by default once you connect the repo in their dashboards; this workflow
+# is only needed if you've turned that off and want deploys gated behind
+# CI passing, or want a single place that triggers both together.
+#
+# Required repo secrets (Settings > Secrets and variables > Actions):
+#   VERCEL_DEPLOY_HOOK_URL   - Vercel project > Settings > Git > Deploy Hooks
+#   RAILWAY_DEPLOY_HOOK_URL  - Railway project > Settings > Webhooks
+# Neither secret exists until you create it — this workflow does nothing
+# destructive if they're missing, it just skips that job.
+
+on:
+  workflow_run:
+    workflows: ["CI"]
+    branches: [main]
+    types: [completed]
+
+jobs:
+  deploy-frontend:
+    name: Trigger Vercel Deploy
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    steps:
+      - name: Check secret is configured
+        id: check
+        run: echo "has_hook=${{ secrets.VERCEL_DEPLOY_HOOK_URL != '' }}" >> "$GITHUB_OUTPUT"
+
+      - name: Trigger deploy hook
+        if: steps.check.outputs.has_hook == 'true'
+        run: curl -X POST "${{ secrets.VERCEL_DEPLOY_HOOK_URL }}"
+
+  deploy-backend:
+    name: Trigger Railway Deploy
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    steps:
+      - name: Check secret is configured
+        id: check
+        run: echo "has_hook=${{ secrets.RAILWAY_DEPLOY_HOOK_URL != '' }}" >> "$GITHUB_OUTPUT"
+
+      - name: Trigger deploy hook
+        if: steps.check.outputs.has_hook == 'true'
+        run: curl -X POST "${{ secrets.RAILWAY_DEPLOY_HOOK_URL }}"
