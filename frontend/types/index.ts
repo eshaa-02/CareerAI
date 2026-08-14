@@ -196,6 +196,14 @@ export interface Interview {
   employerNotes?: string;
   feedback: InterviewFeedback[];
   createdAt: string;
+
+  attachments?: {
+    _id?: string;
+    fileName: string;
+    url: string;
+    uploadedBy?: string;
+    uploadedAt?: string;
+  }[];
 }
 
 export interface PaginationMeta {

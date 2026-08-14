@@ -77,6 +77,14 @@ const InterviewSchema = new mongoose.Schema(
     agenda: { type: String, trim: true, default: '' },
     attachments: [AttachmentSchema],
 
+    attachments?: {
+      _id?: string;
+      fileName: string;
+      url: string;
+      uploadedBy?: string | any;
+      uploadedAt?: string;
+    }[];
+
     status: {
       type: String,
       enum: [
