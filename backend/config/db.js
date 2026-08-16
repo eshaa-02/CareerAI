@@ -1,25 +1,25 @@
 const mongoose = require('mongoose');
 
+let cachedConnection = null;
+
 const connectDB = async () => {
+  if (cachedConnection && mongoose.connection.readyState === 1) {
+    return cachedConnection;
+  }
+
   try {
-    const conn = await mongoose.connect(process.env.MONGO_URI, {
+    cachedConnection = await mongoose.connect(process.env.MONGO_URI, {
       autoIndex: true,
+      serverSelectionTimeoutMS: 10000,
     });
 
-    console.log(`MongoDB Connected: ${conn.connection.host}`);
+    console.log(`MongoDB Connected: ${cachedConnection.connection.host}`);
 
-    mongoose.connection.on('error', (err) => {
-      console.error(`MongoDB connection error: ${err.message}`);
-    });
-
-    mongoose.connection.on('disconnected', () => {
-      console.warn('MongoDB disconnected. Attempting to reconnect...');
-    });
-
-    return conn;
+    return cachedConnection;
   } catch (error) {
+    cachedConnection = null;
     console.error(`Error connecting to MongoDB: ${error.message}`);
-    process.exit(1);
+    throw error;
   }
 };
 
