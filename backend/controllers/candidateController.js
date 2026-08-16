@@ -209,20 +209,35 @@ exports.getJobMatch = asyncHandler(async (req, res, next) => {
 // @access  Private (candidate)
 exports.getRecommendedJobs = asyncHandler(async (req, res) => {
   const profile = await getOrCreateProfile(req.user.id);
-  const jobs = await Job.find({ status: 'active' })
+
+  const jobs = await Job.find({
+    status: 'active',
+  })
     .populate('companyId', 'name logo verified')
     .sort({ createdAt: -1 })
-    .limit(50);
+    .limit(100);
 
   const scored = jobs
     .map((job) => {
       const match = matchCandidateToJob(profile, job);
-      return { job, matchScore: match.matchScore };
+
+      return {
+        job,
+        matchScore: match.matchScore,
+        match,
+      };
     })
+    // HARD FILTER: irrelevant career fields never appear
+    .filter((item) => item.match.relevant === true)
+    // Don't show extremely poor matches either
+    .filter((item) => item.matchScore >= 25)
     .sort((a, b) => b.matchScore - a.matchScore)
     .slice(0, 20);
 
-  res.status(200).json({ success: true, jobs: scored });
+  res.status(200).json({
+    success: true,
+    jobs: scored,
+  });
 });
 
 // @desc    Get candidate's application tracking overview

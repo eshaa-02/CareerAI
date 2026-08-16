@@ -24,25 +24,8 @@ exports.getConversations = asyncHandler(async (req, res) => {
         read: false,
       });
 
-      const data = conversation.toObject();
-
-      // Current user ko remove karke jis person se chat ho rahi hai
-      // usko first position par rakho.
-      const otherParticipant = data.participants.find(
-        (participant) =>
-          participant._id.toString() !== req.user.id.toString()
-      );
-
-      const currentUser = data.participants.find(
-        (participant) =>
-          participant._id.toString() === req.user.id.toString()
-      );
-
       return {
-        ...data,
-        participants: otherParticipant
-          ? [otherParticipant, currentUser].filter(Boolean)
-          : data.participants,
+        ...conversation.toObject(),
         unreadCount,
       };
     })
